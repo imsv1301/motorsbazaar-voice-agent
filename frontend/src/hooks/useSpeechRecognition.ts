@@ -1,3 +1,4 @@
+/// <reference lib="dom" />
 import { useState, useCallback, useRef } from 'react'
 import type { Language } from '../types'
 import { getLanguageCode } from '../utils/voiceSelector'
