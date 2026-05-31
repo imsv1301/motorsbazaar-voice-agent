@@ -1,176 +1,158 @@
-# MotorsBazaar Voice Agent 🚗
+# MotorsBazaar Voice Agent
 
-A free AI-powered voice consultation agent for second-hand car buy/sell business.
-- **Voice**: Hindi & Gujarati using browser Web Speech API (free)
-- **AI Brain**: Groq (free tier — llama-3.3-70b)
-- **Data Storage**: Google Sheets (free)
-- **Dashboard**: React admin panel to manage all leads
+AI voice consultation agent for a second-hand car dealership. Speaks Hindi and Gujarati, collects buyer/seller leads through conversation, saves everything to Google Sheets.
+
+Runs entirely on free tiers. No cloud costs.
 
 ---
 
-## Quick Start
+## What it does
 
-### Step 1 — Get a free Groq API key
-1. Go to https://console.groq.com
+"Priya" — the AI agent — greets customers, asks about what they're looking to buy or sell, collects their name and contact number, and logs the full consultation to a Google Sheet. A React admin dashboard lets the dealership team view, filter, and update lead status.
+
+Voice input and output both run in the browser (Web Speech API). Chrome only.
+
+---
+
+## Stack
+
+| Component | Technology | Cost |
+|-----------|-----------|------|
+| AI / LLM | Groq (llama-3.3-70b) | Free tier |
+| Voice input | Browser Web Speech API | Free |
+| Voice output | Browser Speech Synthesis | Free |
+| Backend | Python FastAPI | Free |
+| Database | Google Sheets | Free |
+| Frontend | React + Vite + Tailwind | Free |
+
+---
+
+## Setup
+
+### Step 1 — Groq API key (2 minutes)
+
+1. Go to [console.groq.com](https://console.groq.com)
 2. Sign up (free)
 3. Create an API key
 
----
+### Step 2 — Google Sheets API (10 minutes)
 
-### Step 2 — Set up Google Sheets API (one-time, ~10 minutes)
+**Create a Google Cloud project:**
+1. Go to [console.cloud.google.com](https://console.cloud.google.com)
+2. New Project → name it `MotorsBazaar`
+3. Enable Google Sheets API and Google Drive API
 
-**a) Create Google Cloud project**
-1. Go to https://console.cloud.google.com
-2. Click "New Project" → name it `MotorsBazaar`
-3. Enable **Google Sheets API**:
-   - Search "Google Sheets API" → Enable
-4. Enable **Google Drive API**:
-   - Search "Google Drive API" → Enable
+**Create a Service Account:**
+1. IAM & Admin → Service Accounts → Create Service Account
+2. Name: `motorsbazaar-agent` → Done
+3. Click the account → Keys → Add Key → Create new key → JSON
+4. Download the JSON, rename to `service-account.json`
+5. Place at `backend/credentials/service-account.json`
 
-**b) Create Service Account**
-1. Go to **IAM & Admin → Service Accounts**
-2. Click "Create Service Account"
-   - Name: `motorsbazaar-agent`
-   - Click "Done"
-3. Click on the created service account
-4. Go to **Keys** tab → **Add Key** → **Create new key** → **JSON**
-5. Download the JSON file
-6. Rename it to `service-account.json`
-7. Place it in: `backend/credentials/service-account.json`
+**Set up the Google Sheet:**
+1. Create a new spreadsheet at [sheets.google.com](https://sheets.google.com)
+2. Name it exactly: `MotorsBazaar Consultations`
+3. Copy the service account email from the JSON file
+4. Share the sheet with that email → Editor access
 
-**c) Create Google Sheet**
-1. Go to https://sheets.google.com
-2. Create a new spreadsheet
-3. Name it exactly: `MotorsBazaar Consultations`
-4. Copy the **service account email** from the JSON file (looks like: `motorsbazaar-agent@project.iam.gserviceaccount.com`)
-5. Click **Share** on the Google Sheet → paste the service account email → give **Editor** access
-
----
-
-### Step 3 — Run the Backend
+### Step 3 — Run the backend
 
 ```bash
 cd backend
-
-# Create virtual environment
 python -m venv venv
-venv\Scripts\activate        # Windows
-# source venv/bin/activate   # Mac/Linux
+source venv/bin/activate       # Mac/Linux
+# venv\Scripts\activate        # Windows
 
-# Install dependencies
 pip install -r requirements.txt
 
-# Set up environment
-copy .env.example .env
-# Edit .env and fill in your GROQ_API_KEY
+cp .env.example .env
+# Edit .env — add your GROQ_API_KEY
 
-# Start the server
 uvicorn app.main:app --reload --port 8000
 ```
 
-Backend runs at: http://localhost:8000
-API docs at: http://localhost:8000/docs
+Backend: http://localhost:8000 | API docs: http://localhost:8000/docs
 
----
-
-### Step 4 — Run the Frontend
-
-Open a new terminal:
+### Step 4 — Run the frontend
 
 ```bash
 cd frontend
-
-# Install dependencies
 npm install
-
-# Start the dev server
 npm run dev
 ```
 
-Frontend runs at: http://localhost:5173
+Frontend: http://localhost:5173
 
 ---
 
-## Usage
+## Using the agent
 
-### Voice Agent (Main Page)
-- Open http://localhost:5173
-- **Use Google Chrome** (required for voice features)
-- Click **हिंदी** or **ગુજરાતી** to choose language
-- Click the 🎤 mic button and speak
-- Or type in the text box below
-- "Priya" will collect your name, contact, and car query
-- Data auto-saves to Google Sheets when consultation is complete
+**Voice agent** — http://localhost:5173
+- Open in Google Chrome (required for voice)
+- Choose Hindi or Gujarati
+- Click the mic and speak, or type below
+- Priya collects name, contact, and car query
+- Data saves to Google Sheets when consultation completes
 
-### Dashboard
-- Open http://localhost:5173/dashboard
-- View all consultations from Google Sheets
+**Admin dashboard** — http://localhost:5173/dashboard
+- View all consultations pulled from Google Sheets
 - Search by name, contact, or details
-- Filter by status (New / In Progress / Done)
-- Update status by clicking the dropdown
-- Delete entries
+- Filter by status: New / In Progress / Done
+- Update status inline, delete entries
 
 ---
 
-## Project Structure
+## Project structure
 
 ```
-auto-consult-voice-agent/
+motorsbazaar-voice-agent/
 ├── backend/
 │   ├── app/
-│   │   ├── main.py              # FastAPI app
-│   │   ├── config.py            # Settings
+│   │   ├── main.py                    # FastAPI app
+│   │   ├── config.py
 │   │   ├── routers/
-│   │   │   ├── chat.py          # POST /api/chat (Groq AI)
-│   │   │   └── consultations.py # CRUD /api/consultations
+│   │   │   ├── chat.py                # POST /api/chat (Groq AI)
+│   │   │   └── consultations.py       # CRUD /api/consultations
 │   │   ├── services/
-│   │   │   ├── groq_service.py  # AI conversation
-│   │   │   └── sheets_service.py# Google Sheets
-│   │   ├── models/
-│   │   │   ├── chat.py          # Chat schemas
-│   │   │   └── consultation.py  # Consultation schemas
+│   │   │   ├── groq_service.py
+│   │   │   └── sheets_service.py
 │   │   └── prompts/
-│   │       ├── system_hindi.py  # Priya's Hindi persona
-│   │       └── system_gujarati.py # Priya's Gujarati persona
-│   ├── credentials/             # Place service-account.json here
+│   │       ├── system_hindi.py        # Priya's Hindi persona
+│   │       └── system_gujarati.py     # Priya's Gujarati persona
+│   ├── credentials/                   # place service-account.json here
 │   ├── requirements.txt
 │   └── .env.example
 └── frontend/
     └── src/
         ├── pages/
-        │   ├── VoiceAgentPage.tsx  # Voice chat UI
-        │   └── DashboardPage.tsx   # Admin dashboard
+        │   ├── VoiceAgentPage.tsx
+        │   └── DashboardPage.tsx
         ├── hooks/
-        │   ├── useConversation.ts  # Chat state management
-        │   ├── useSpeechRecognition.ts  # Mic input
-        │   └── useSpeechSynthesis.ts    # Voice output
+        │   ├── useConversation.ts
+        │   ├── useSpeechRecognition.ts
+        │   └── useSpeechSynthesis.ts
         └── components/
-            ├── voice/              # Voice agent components
-            └── dashboard/          # Dashboard components
+            ├── voice/
+            └── dashboard/
 ```
 
 ---
 
 ## Troubleshooting
 
-| Problem | Solution |
-|---------|----------|
-| Voice not working | Use Google Chrome (Firefox/Safari not supported) |
-| Microphone denied | Go to Chrome Settings → Privacy → Microphone → Allow |
-| Gujarati voice unavailable | Normal — falls back to Hindi voice; text still in Gujarati |
-| Google Sheets error | Check `credentials/service-account.json` path and Sheet sharing |
-| Groq API error | Verify `GROQ_API_KEY` in `.env` file |
-| CORS error | Make sure backend is running on port 8000 |
+| Problem | Fix |
+|---------|-----|
+| Voice not working | Use Google Chrome — Firefox and Safari don't support Web Speech API |
+| Microphone denied | Chrome Settings → Privacy → Microphone → Allow localhost |
+| Gujarati voice unavailable | Expected — falls back to Hindi voice, text stays in Gujarati |
+| Google Sheets error | Check `credentials/service-account.json` path and sheet sharing permissions |
+| Groq API error | Check `GROQ_API_KEY` in `.env` |
+| CORS error | Make sure backend is running on port 8000 before starting frontend |
 
 ---
 
-## Tech Stack (All Free)
+## Built by
 
-| Component | Technology | Cost |
-|-----------|-----------|------|
-| AI / LLM | Groq (llama-3.3-70b) | Free tier |
-| Voice Input | Browser Web Speech API | Free |
-| Voice Output | Browser Speech Synthesis | Free |
-| Backend | Python FastAPI | Free |
-| Database | Google Sheets | Free |
-| Frontend | React + Vite + Tailwind | Free |
+**Mohammad Sahil Vahora** — ECE Final Year, Parul University 2026
+
+GitHub: [@imsv1301](https://github.com/imsv1301)
