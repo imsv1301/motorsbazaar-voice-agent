@@ -8,7 +8,7 @@ Runs entirely on free tiers. No cloud costs.
 
 ## What it does
 
-"Priya" — the AI agent — greets customers, asks about what they're looking to buy or sell, collects their name and contact number, and logs the full consultation to a Google Sheet. A React admin dashboard lets the dealership team view, filter, and update lead status.
+"Priya", the AI agent, greets customers, asks about what they're looking to buy or sell, collects their name and contact number, and logs the full consultation to a Google Sheet. A React admin dashboard lets the dealership team view, filter, and update lead status.
 
 Voice input and output both run in the browser (Web Speech API). Chrome only.
 
@@ -66,7 +66,7 @@ source venv/bin/activate       # Mac/Linux
 pip install -r requirements.txt
 
 cp .env.example .env
-# Edit .env — add your GROQ_API_KEY
+# Edit .env and add your GROQ_API_KEY
 
 uvicorn app.main:app --reload --port 8000
 ```
@@ -87,14 +87,14 @@ Frontend: http://localhost:5173
 
 ## Using the agent
 
-**Voice agent** — http://localhost:5173
+**Voice agent:** http://localhost:5173
 - Open in Google Chrome (required for voice)
 - Choose Hindi or Gujarati
 - Click the mic and speak, or type below
 - Priya collects name, contact, and car query
 - Data saves to Google Sheets when consultation completes
 
-**Admin dashboard** — http://localhost:5173/dashboard
+**Admin dashboard:** http://localhost:5173/dashboard
 - View all consultations pulled from Google Sheets
 - Search by name, contact, or details
 - Filter by status: New / In Progress / Done
@@ -142,9 +142,9 @@ motorsbazaar-voice-agent/
 
 | Problem | Fix |
 |---------|-----|
-| Voice not working | Use Google Chrome — Firefox and Safari don't support Web Speech API |
+| Voice not working | Use Google Chrome. Firefox and Safari don't support Web Speech API |
 | Microphone denied | Chrome Settings → Privacy → Microphone → Allow localhost |
-| Gujarati voice unavailable | Expected — falls back to Hindi voice, text stays in Gujarati |
+| Gujarati voice unavailable | Expected. It falls back to the Hindi voice and the text stays in Gujarati |
 | Google Sheets error | Check `credentials/service-account.json` path and sheet sharing permissions |
 | Groq API error | Check `GROQ_API_KEY` in `.env` |
 | CORS error | Make sure backend is running on port 8000 before starting frontend |
@@ -153,6 +153,6 @@ motorsbazaar-voice-agent/
 
 ## Built by
 
-**Mohammad Sahil Vahora** — ECE Final Year, Parul University 2026
+**Mohammad Sahil Vahora**, Electronics engineering graduate, BVM Engineering College (GTU). Based in Bristol, UK.
 
 GitHub: [@imsv1301](https://github.com/imsv1301)
